@@ -1,6 +1,9 @@
 import pandas as pd
 import os
-from sklearn.model_selection import train_test_split
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
 # print(os.getcwd()) #Current working directory
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,7 +34,23 @@ y_train = train_df['Prognosis']
 X_test = test_df.drop('Prognosis', axis=1)
 y_test = test_df['Prognosis']
 
-# print(X_train.columns.equals(X_test.columns))
+# X_train = X_train.loc[:, (X_train != 0).any(axis=0)]
+# X_test = X_test[X_train.columns] 
+
+print(X_train.columns.equals(X_test.columns))
 
 print("X_train:", X_train.shape)
 print("X_test:", X_test.shape)
+
+model = RandomForestClassifier(class_weight='balanced')
+# model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Train Model
+model.fit(X_train, y_train)
+
+print("Model trained ✅")
+
+# Evaluate Model
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
