@@ -9,9 +9,22 @@ file_path = os.path.join(BASE_DIR, 'data', 'trainings.csv') #for project_folder/
 
 # load dataset
 df = pd.read_csv(file_path, encoding='latin1') #messy-char to readable
-# df = pd.read_csv('../data/trainings.csv')
 
-print(df.head())
+# remove duplicate rows
+df = df.drop_duplicates()
+
+# remove missing values
+df = df.dropna()
+
+print("After cleaning:")
 print(df.info()) #sz
-#File path dynamically banaya,CSV load kiya,Data preview + structure check kiya
+# print(df.head())
 
+# features (symptoms)
+X = df.drop('Prognosis', axis=1)
+
+# target (disease/prognosis)
+y = df['Prognosis']
+
+print("X shape:", X.shape)  #drop col(y=1) named prognosis,2D
+print("y shape:", y.shape)  #2D, 391row & 1col
