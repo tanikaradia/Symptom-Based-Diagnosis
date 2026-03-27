@@ -1,30 +1,37 @@
 import pandas as pd
 import os
+from sklearn.model_selection import train_test_split
 # print(os.getcwd()) #Current working directory
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #2folderout,fullpath,of curr =root folder
-file_path = os.path.join(BASE_DIR, 'data', 'trainings.csv') #for project_folder/data/trainings.csv
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+train_path = os.path.join(BASE_DIR, 'data', 'training.csv') #for project_folder/data/trainings.csv
+test_path = os.path.join(BASE_DIR, 'data', 'testing.csv')
 
 # print("File path:", file_path)
 
 # load dataset
-df = pd.read_csv(file_path, encoding='latin1') #messy-char to readable
+train_df = pd.read_csv(train_path, encoding='latin1')
+test_df = pd.read_csv(test_path, encoding='latin1')
+# df = pd.read_csv(file_path, encoding='latin1') #messy-char to readable
 
-# remove duplicate rows
-df = df.drop_duplicates()
-
-# remove missing values
-df = df.dropna()
+train_df = train_df.drop_duplicates().dropna()
+test_df = test_df.drop_duplicates().dropna()
 
 print("After cleaning:")
-print(df.info()) #sz
+print(train_df.info())
 # print(df.head())
 
-# features (symptoms)
-X = df.drop('Prognosis', axis=1)
+# # features (symptoms) x
+# # target (disease/prognosis) y
+# training data
+X_train = train_df.drop('Prognosis', axis=1)
+y_train = train_df['Prognosis']
 
-# target (disease/prognosis)
-y = df['Prognosis']
+# testing data
+X_test = test_df.drop('Prognosis', axis=1)
+y_test = test_df['Prognosis']
 
-print("X shape:", X.shape)  #drop col(y=1) named prognosis,2D
-print("y shape:", y.shape)  #2D, 391row & 1col
+# print(X_train.columns.equals(X_test.columns))
+
+print("X_train:", X_train.shape)
+print("X_test:", X_test.shape)
